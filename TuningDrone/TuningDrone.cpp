@@ -14,8 +14,10 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
+ATOM                createwindow2(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
+LRESULT CALLBACK    WndProc2(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
@@ -82,6 +84,47 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     return RegisterClassExW(&wcex);
 }
 
+ATOM createwindow2(HINSTANCE hInstance)
+{
+
+    WNDCLASSEXW wcex;
+
+    wcex.hInstance = hInstance;
+    wcex.lpszClassName = szWindowClass;
+    wcex.lpfnWndProc = WndProc2;      /* This function is called by windows */
+    wcex.style = CS_DBLCLKS;                 /* Catch double-clicks */
+    wcex.cbSize = sizeof(WNDCLASSEX);
+
+    /* Use default icon and mouse-pointer */
+    wcex.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+    wcex.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
+    wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+    wcex.lpszMenuName = NULL;                 /* No menu */
+    wcex.cbClsExtra = 0;                      /* No extra bytes after the window class */
+    wcex.cbWndExtra = 0;                      /* structure or the window instance */
+    /* Use Windows's default colour as the background of the window */
+    wcex.hbrBackground = (HBRUSH)COLOR_BACKGROUND;
+    if (!RegisterClassEx(&wcex))
+        return NULL;
+    HWND handleforwindow2 = CreateWindowEx(
+        0,                   /* Extended possibilites for variation */
+        szWindowClass,         /* Classname */
+        _T("Code::Blocks Template Windows App"),       /* Title Text */
+        WS_OVERLAPPEDWINDOW, /* default window */
+        CW_USEDEFAULT,       /* Windows decides the position */
+        CW_USEDEFAULT,       /* where the window ends up on the screen */
+        330,                 /* The programs width */
+        320,                 /* and height in pixels */
+        HWND_DESKTOP,        /* The window is a child-window to desktop */
+        NULL,                /* No menu */
+        hInstance,       /* Program Instance handler */
+        NULL                 /* No Window Creation data */
+    );
+    return RegisterClassExW(&wcex);
+    /* Make the window visible on the screen */
+    //ShowWindow(handleforwindow2, nCmdShow);
+}
+
 //
 //   FUNCTION: InitInstance(HINSTANCE, int)
 //
@@ -99,13 +142,19 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
 
-   if (!hWnd)
+   HWND hWnd2 = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,
+       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+
+   if (!hWnd || !hWnd2)
    {
       return FALSE;
    }
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
+
+   //ShowWindow(hWnd2, nCmdShow);
+   UpdateWindow(hWnd2);
 
    return TRUE;
 }
@@ -124,6 +173,180 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     switch (message)
     {
+    case WM_CREATE:
+    {
+        HWND hwndButton = CreateWindowEx(
+            0,
+            L"BUTTON",  // Predefined class; Unicode assumed 
+            NULL,      // Button text 
+            WS_CHILD | BS_OWNERDRAW,  // Styles 
+            500,         // x position 
+            200,         // y position 
+            50,        // Button width
+            50,        // Button height
+            hWnd,     // Parent window
+            (HMENU)1,       // Menu ID
+            (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE),
+            NULL);      // Pointer not needed.
+        ShowWindow(hwndButton, SW_SHOW);
+
+        HWND hwndButton2 = CreateWindowEx(
+            0,
+            L"BUTTON",  // Predefined class; Unicode assumed 
+            NULL,      // Button text 
+            WS_CHILD | BS_OWNERDRAW,  // Styles 
+            600,         // x position 
+            200,         // y position 
+            50,        // Button width
+            50,        // Button height
+            hWnd,     // Parent window
+            (HMENU)2,       // Menu ID.
+            (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE),
+            NULL);      // Pointer not needed.
+        ShowWindow(hwndButton2, SW_SHOW);
+
+        HWND stopButton = CreateWindowEx(
+            0,
+            L"BUTTON",  // Predefined class; Unicode assumed 
+            NULL,      // Button text 
+            WS_CHILD | BS_OWNERDRAW,  // Styles 
+            525,         // x position 
+            300,         // y position 
+            100,        // Button width
+            50,        // Button height
+            hWnd,     // Parent window
+            (HMENU)3,       // Menu ID.
+            (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE),
+            NULL);      // Pointer not needed.
+        ShowWindow(stopButton, SW_SHOW);
+
+        HWND exitButton = CreateWindowEx(
+            0,
+            L"BUTTON",  // Predefined class; Unicode assumed 
+            NULL,      // Button text 
+            WS_CHILD | BS_OWNERDRAW,  // Styles 
+            1028,         // x position 
+            470,         // y position 
+            100,        // Button width
+            50,        // Button height
+            hWnd,     // Parent window
+            (HMENU)4,       // Menu ID.
+            (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE),
+            NULL);      // Pointer not needed.
+        ShowWindow(exitButton, SW_SHOW);
+
+        HWND hwndButton3 = CreateWindowEx(
+            0,
+            L"BUTTON",  // Predefined class; Unicode assumed 
+            NULL,      // Button text 
+            WS_CHILD | BS_OWNERDRAW,  // Styles 
+            700,         // x position 
+            200,         // y position 
+            50,        // Button width
+            50,        // Button height
+            hWnd,     // Parent window
+            (HMENU)5,       // Menu ID.
+            (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE),
+            NULL);      // Pointer not needed.
+        ShowWindow(hwndButton3, SW_SHOW);
+
+        HWND hwndButton4 = CreateWindowEx(
+            0,
+            L"BUTTON",  // Predefined class; Unicode assumed 
+            NULL,      // Button text 
+            WS_CHILD | BS_OWNERDRAW,  // Styles 
+            400,         // x position 
+            200,         // y position 
+            50,        // Button width
+            50,        // Button height
+            hWnd,     // Parent window
+            (HMENU)6,       // Menu ID.
+            (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE),
+            NULL);      // Pointer not needed.
+        ShowWindow(hwndButton4, SW_SHOW);
+        break;
+    }
+    case WM_DRAWITEM:
+        {
+        LPDRAWITEMSTRUCT lpdis = (DRAWITEMSTRUCT*)lParam;
+        SIZE size;
+            switch ((UINT)wParam)
+            {
+            case 1:
+                GetTextExtentPoint32(lpdis->hDC, L"F", strlen("F"), &size);
+                SetTextColor(lpdis->hDC, RGB(204, 0, 102));
+                SetBkColor(lpdis->hDC, RGB(0, 204, 102));
+                ExtTextOut(lpdis->hDC,
+                    ((lpdis->rcItem.right - lpdis->rcItem.left) - size.cx) / 2,
+                    ((lpdis->rcItem.bottom - lpdis->rcItem.top) - size.cy) / 2,
+                    ETO_OPAQUE | ETO_CLIPPED, &lpdis->rcItem, L"F", strlen("F"), NULL);
+                DrawEdge(lpdis->hDC, &lpdis->rcItem,
+                    (lpdis->itemState & ODS_SELECTED ?
+                        EDGE_SUNKEN : EDGE_RAISED), BF_RECT);
+                break;
+            case 2:
+                GetTextExtentPoint32(lpdis->hDC, L"Bb", strlen("Bb"), &size);
+                SetTextColor(lpdis->hDC, RGB(204, 0, 102));
+                SetBkColor(lpdis->hDC, RGB(0, 204, 102));
+                ExtTextOut(lpdis->hDC,
+                    ((lpdis->rcItem.right - lpdis->rcItem.left) - size.cx) / 2,
+                    ((lpdis->rcItem.bottom - lpdis->rcItem.top) - size.cy) / 2,
+                    ETO_OPAQUE | ETO_CLIPPED, &lpdis->rcItem, L"Bb", strlen("Bb"), NULL);
+                DrawEdge(lpdis->hDC, &lpdis->rcItem,
+                    (lpdis->itemState & ODS_SELECTED ?
+                        EDGE_SUNKEN : EDGE_RAISED), BF_RECT);
+                break;
+            case 3:
+                GetTextExtentPoint32(lpdis->hDC, L"STOP", strlen("STOP"), &size);
+                SetTextColor(lpdis->hDC, RGB(0, 255, 255));
+                SetBkColor(lpdis->hDC, RGB(0, 0, 255));
+                ExtTextOut(lpdis->hDC,
+                    ((lpdis->rcItem.right - lpdis->rcItem.left) - size.cx) / 2,
+                    ((lpdis->rcItem.bottom - lpdis->rcItem.top) - size.cy) / 2,
+                    ETO_OPAQUE | ETO_CLIPPED, &lpdis->rcItem, L"STOP", strlen("STOP"), NULL);
+                DrawEdge(lpdis->hDC, &lpdis->rcItem,
+                    (lpdis->itemState & ODS_SELECTED ?
+                        EDGE_SUNKEN : EDGE_RAISED), BF_RECT);
+                break;
+            case 4:
+                GetTextExtentPoint32(lpdis->hDC, L"EXIT", strlen("EXIT"), &size);
+                SetTextColor(lpdis->hDC, RGB(0, 255, 255));
+                SetBkColor(lpdis->hDC, RGB(0, 0, 255));
+                ExtTextOut(lpdis->hDC,
+                    ((lpdis->rcItem.right - lpdis->rcItem.left) - size.cx) / 2,
+                    ((lpdis->rcItem.bottom - lpdis->rcItem.top) - size.cy) / 2,
+                    ETO_OPAQUE | ETO_CLIPPED, &lpdis->rcItem, L"EXIT", strlen("EXIT"), NULL);
+                DrawEdge(lpdis->hDC, &lpdis->rcItem,
+                    (lpdis->itemState & ODS_SELECTED ?
+                        EDGE_SUNKEN : EDGE_RAISED), BF_RECT);
+                break;
+            case 5:
+                GetTextExtentPoint32(lpdis->hDC, L"A", strlen("A"), &size);
+                SetTextColor(lpdis->hDC, RGB(204, 0, 102));
+                SetBkColor(lpdis->hDC, RGB(0, 204, 102));
+                ExtTextOut(lpdis->hDC,
+                    ((lpdis->rcItem.right - lpdis->rcItem.left) - size.cx) / 2,
+                    ((lpdis->rcItem.bottom - lpdis->rcItem.top) - size.cy) / 2,
+                    ETO_OPAQUE | ETO_CLIPPED, &lpdis->rcItem, L"A", strlen("A"), NULL);
+                DrawEdge(lpdis->hDC, &lpdis->rcItem,
+                    (lpdis->itemState & ODS_SELECTED ?
+                        EDGE_SUNKEN : EDGE_RAISED), BF_RECT);
+                break;
+            case 6:
+                GetTextExtentPoint32(lpdis->hDC, L"C", strlen("C"), &size);
+                SetTextColor(lpdis->hDC, RGB(204, 0, 102));
+                SetBkColor(lpdis->hDC, RGB(0, 204, 102));
+                ExtTextOut(lpdis->hDC,
+                    ((lpdis->rcItem.right - lpdis->rcItem.left) - size.cx) / 2,
+                    ((lpdis->rcItem.bottom - lpdis->rcItem.top) - size.cy) / 2,
+                    ETO_OPAQUE | ETO_CLIPPED, &lpdis->rcItem, L"C", strlen("C"), NULL);
+                DrawEdge(lpdis->hDC, &lpdis->rcItem,
+                    (lpdis->itemState & ODS_SELECTED ?
+                        EDGE_SUNKEN : EDGE_RAISED), BF_RECT);
+                break;
+            }
+        }
+        break;
     case WM_COMMAND:
         {
             switch (LOWORD(wParam)) 
@@ -142,6 +365,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 break;
             case 5:
                 PlaySound(TEXT("C:\\Users\\realt\\Drones\\ADrone.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                break;
+            case 6:
+                PlaySound(TEXT("C:\\Users\\realt\\Drones\\CDrone.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 break;
             }
             int wmId = LOWORD(wParam);
@@ -182,84 +408,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 5, 5,
                 copyright, _tcslen(copyright));
 
-            HWND hwndButton = CreateWindow(
-                L"BUTTON",  // Predefined class; Unicode assumed 
-                L"F",      // Button text 
-                WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles 
-                500,         // x position 
-                200,         // y position 
-                50,        // Button width
-                50,        // Button height
-                hWnd,     // Parent window
-                (HMENU)1,       // Menu ID
-                (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE),
-                NULL);      // Pointer not needed.
-
-            HWND hwndButton2 = CreateWindow(
-                L"BUTTON",  // Predefined class; Unicode assumed 
-                L"Bb",      // Button text 
-                WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles 
-                600,         // x position 
-                200,         // y position 
-                50,        // Button width
-                50,        // Button height
-                hWnd,     // Parent window
-                (HMENU)2,       // Menu ID.
-                (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE),
-                NULL);      // Pointer not needed.
-
-            HWND stopButton = CreateWindow(
-                L"BUTTON",  // Predefined class; Unicode assumed 
-                L"STOP",      // Button text 
-                WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles 
-                525,         // x position 
-                300,         // y position 
-                100,        // Button width
-                50,        // Button height
-                hWnd,     // Parent window
-                (HMENU)3,       // Menu ID.
-                (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE),
-                NULL);      // Pointer not needed.
-
-            HWND exitButton = CreateWindow(
-                L"BUTTON",  // Predefined class; Unicode assumed 
-                L"EXIT",      // Button text 
-                WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles 
-                1028,         // x position 
-                470,         // y position 
-                100,        // Button width
-                50,        // Button height
-                hWnd,     // Parent window
-                (HMENU)4,       // Menu ID.
-                (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE),
-                NULL);      // Pointer not needed.
-
-            HWND hwndButton3 = CreateWindow(
-                L"BUTTON",  // Predefined class; Unicode assumed 
-                L"A",      // Button text 
-                WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles 
-                700,         // x position 
-                200,         // y position 
-                50,        // Button width
-                50,        // Button height
-                hWnd,     // Parent window
-                (HMENU)5,       // Menu ID.
-                (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE),
-                NULL);      // Pointer not needed.
-
-            HWND hwndButton4 = CreateWindow(
-                L"BUTTON",  // Predefined class; Unicode assumed 
-                L"C",      // Button text 
-                WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles 
-                400,         // x position 
-                200,         // y position 
-                50,        // Button width
-                50,        // Button height
-                hWnd,     // Parent window
-                (HMENU)6,       // Menu ID.
-                (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE),
-                NULL);      // Pointer not needed.
-
             EndPaint(hWnd, &ps);
         }
         break;
@@ -270,6 +418,81 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
+}
+
+LRESULT CALLBACK WndProc2(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    switch (message)
+    {
+    case WM_COMMAND:
+    {
+        switch (LOWORD(wParam))
+        {
+        case 1:
+            PlaySound(TEXT("C:\\Users\\realt\\Drones\\FDrone.wav"), NULL, SND_FILENAME | SND_ASYNC);
+            break;
+            int wmId = LOWORD(wParam);
+            // Parse the menu selections:
+            switch (wmId)
+            {
+            case IDM_ABOUT:
+                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+                break;
+            case IDM_EXIT:
+                DestroyWindow(hWnd);
+                break;
+            default:
+                return DefWindowProc(hWnd, message, wParam, lParam);
+            }
+        }
+        break;
+    case WM_PAINT:
+    {
+        PAINTSTRUCT ps;
+        HFONT hFont = CreateFont(36, 0, 0, 0, 1000, FALSE, TRUE, FALSE, DEFAULT_CHARSET, OUT_OUTLINE_PRECIS,
+            CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, VARIABLE_PITCH, TEXT("Times New Roman"));
+        HFONT hFont2 = CreateFont(24, 0, 0, 0, 1000, FALSE, FALSE, FALSE, DEFAULT_CHARSET, OUT_OUTLINE_PRECIS,
+            CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY, VARIABLE_PITCH, TEXT("Times New Roman"));
+        HDC hdc = BeginPaint(hWnd, &ps);
+        TCHAR greeting[] = _T("Trombone Drone");
+        TCHAR copyright[] = _T("© Tommy Harris 2022");
+
+        SelectObject(hdc, hFont);
+        SetTextColor(hdc, RGB(0, 0, 128));
+        SetBkMode(hdc, TRANSPARENT);
+        TextOut(hdc,
+            460, 150,
+            greeting, _tcslen(greeting));
+        SelectObject(hdc, hFont2);
+        SetTextColor(hdc, RGB(0, 0, 0));
+        TextOut(hdc,
+            5, 5,
+            copyright, _tcslen(copyright));
+
+        HWND hwndButton = CreateWindow(
+            L"BUTTON",  // Predefined class; Unicode assumed 
+            L"F",      // Button text 
+            WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,  // Styles 
+            500,         // x position 
+            200,         // y position 
+            50,        // Button width
+            50,        // Button height
+            hWnd,     // Parent window
+            (HMENU)1,       // Menu ID
+            (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE),
+            NULL);      // Pointer not needed.
+
+        EndPaint(hWnd, &ps);
+    }
+    break;
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
+    default:
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
+    return 0;
+    }
 }
 
 // Message handler for about box.
