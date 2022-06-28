@@ -378,13 +378,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                         EDGE_SUNKEN : EDGE_RAISED), BF_RECT);
                 break;
             case 2:
-                GetTextExtentPoint32(lpdis->hDC, L"Bb", strlen("Bb"), &size);
+                GetTextExtentPoint32(lpdis->hDC, L"A#/Bb", strlen("A#/Bb"), &size);
                 SetTextColor(lpdis->hDC, RGB(204, 0, 102));
                 SetBkColor(lpdis->hDC, RGB(0, 204, 102));
                 ExtTextOut(lpdis->hDC,
                     ((lpdis->rcItem.right - lpdis->rcItem.left) - size.cx) / 2,
                     ((lpdis->rcItem.bottom - lpdis->rcItem.top) - size.cy) / 2,
-                    ETO_OPAQUE | ETO_CLIPPED, &lpdis->rcItem, L"Bb", strlen("Bb"), NULL);
+                    ETO_OPAQUE | ETO_CLIPPED, &lpdis->rcItem, L"A#/Bb", strlen("A#/Bb"), NULL);
                 DrawEdge(lpdis->hDC, &lpdis->rcItem,
                     (lpdis->itemState & ODS_SELECTED ?
                         EDGE_SUNKEN : EDGE_RAISED), BF_RECT);
@@ -575,9 +575,34 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 PlaySound(TEXT("Drones\\CDrone.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 break;
             case 7:
-                PlaySound(NULL, NULL, SND_FILENAME | SND_ASYNC);
+                PlaySound(TEXT("Drones\\DbDrone.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                break;
+            case 8:
+                PlaySound(TEXT("Drones\\DDrone.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                break;
+            case 9:
+                PlaySound(TEXT("Drones\\EbDrone.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                break;
+            case 10:
+                PlaySound(TEXT("Drones\\EDrone.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                break;
+            case 11:
+                PlaySound(TEXT("Drones\\GbDrone.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                break;
+            case 12:
+                PlaySound(TEXT("Drones\\GDrone.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                break;
+            case 13:
+                PlaySound(TEXT("Drones\\AbDrone.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                break;
+            case 14:
+                PlaySound(TEXT("Drones\\BDrone.wav"), NULL, SND_FILENAME | SND_ASYNC);
+                break;
+            case 15:
+                PlaySound(TEXT("Drones\\HighCDrone.wav"), NULL, SND_FILENAME | SND_ASYNC);
                 break;
             }
+
             int wmId = LOWORD(wParam);
             // Parse the menu selections:
             switch (wmId)
