@@ -357,6 +357,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE),
             NULL);      // Pointer not needed.
         ShowWindow(hwndButton13, SW_SHOW);
+
+        HWND dropDown = CreateWindowEx(
+            0, 
+            L"BUTTON", NULL,
+            WS_CHILD | BS_SPLITBUTTON,
+            1000, 20, 120, 50,
+            hWnd, (HMENU)100, (HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE), NULL);
+        ShowWindow(dropDown, SW_SHOW);
         break;
     }
     case WM_DRAWITEM:
@@ -545,6 +553,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     ((lpdis->rcItem.right - lpdis->rcItem.left) - size.cx) / 2,
                     ((lpdis->rcItem.bottom - lpdis->rcItem.top) - size.cy) / 2,
                     ETO_OPAQUE | ETO_CLIPPED, &lpdis->rcItem, L"C", strlen("C"), NULL);
+                DrawEdge(lpdis->hDC, &lpdis->rcItem,
+                    (lpdis->itemState & ODS_SELECTED ?
+                        EDGE_SUNKEN : EDGE_RAISED), BF_RECT);
+                break;
+            case 100:
+                GetTextExtentPoint32(lpdis->hDC, L"TEST", strlen("TEST"), &size);
+                SetTextColor(lpdis->hDC, RGB(204, 0, 102));
+                SetBkColor(lpdis->hDC, RGB(0, 204, 102));
+                ExtTextOut(lpdis->hDC,
+                    ((lpdis->rcItem.right - lpdis->rcItem.left) - size.cx) / 2,
+                    ((lpdis->rcItem.bottom - lpdis->rcItem.top) - size.cy) / 2,
+                    ETO_OPAQUE | ETO_CLIPPED, &lpdis->rcItem, L"TEST", strlen("TEST"), NULL);
                 DrawEdge(lpdis->hDC, &lpdis->rcItem,
                     (lpdis->itemState & ODS_SELECTED ?
                         EDGE_SUNKEN : EDGE_RAISED), BF_RECT);
